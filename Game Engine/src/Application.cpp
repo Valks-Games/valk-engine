@@ -93,6 +93,10 @@ int main(void)
 	if (!glfwInit())
 		return -1;
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(640, 480, "Game Engine", NULL, NULL);
 	if (!window)
@@ -113,8 +117,8 @@ int main(void)
 
 	GLfloat positions[] = {
 		-0.5f, -0.5f, // 0
-			0.5f, -0.5f, // 1
-			0.5f,  0.5f, // 2
+		 0.5f, -0.5f, // 1
+		 0.5f,  0.5f, // 2
 		-0.5f,  0.5f, // 3
 	};
 
@@ -122,6 +126,10 @@ int main(void)
 		0, 1, 2, 
 		2, 3, 0
 	};
+
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
@@ -144,6 +152,11 @@ int main(void)
 	GLint location = glGetUniformLocation(shader, "u_Color");
 	glUniform4f(location, 1.0f, 0.0f, 0.5f, 1.0f);
 
+	glBindVertexArray(0);
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 	float g = 0.0f;
 	float increment = 0.01f;
 
@@ -153,10 +166,11 @@ int main(void)
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		glUseProgram(shader);
 		glUniform4f(location, 1.0f, g, 0.5f, 1.0f);
 
+		glBindVertexArray(vao);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
