@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../graphics/Renderer.h"
+#include "../graphics/renderer.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 

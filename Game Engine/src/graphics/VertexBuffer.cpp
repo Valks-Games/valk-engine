@@ -1,6 +1,6 @@
-#include "VertexBuffer.h"
+#include "vertexbuffer.h"
 
-#include "Renderer.h"
+#include "renderer.h"
 
 VertexBuffer::VertexBuffer(const void * data, GLuint size)
 {

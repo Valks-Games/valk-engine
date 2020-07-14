@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include "shader.h"
 
 ShaderProgramSource ParseShader(const std::string& filepath)
 {

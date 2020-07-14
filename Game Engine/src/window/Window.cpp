@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "window.h"
 
 void window_resize(GLFWwindow* window, int width, int height);
 

@@ -1,15 +1,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-
 #include <string>
 #include <iostream>
 
-#include "graphics/Renderer.h"
-#include "graphics/VertexBuffer.h"
-#include "graphics/IndexBuffer.h"
-#include "graphics/Shader.h"
-#include "window/Window.h"
+#include "graphics/renderer.h"
+#include "graphics/vertexbuffer.h"
+#include "graphics/indexbuffer.h"
+#include "graphics/shader.h"
+#include "window/window.h"
 
 int main(void)
 {
