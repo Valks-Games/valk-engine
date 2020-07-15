@@ -4,14 +4,20 @@
 #include <string>
 #include <iostream>
 
-#include "graphics/renderer.h"
-#include "graphics/vertexbuffer.h"
-#include "graphics/indexbuffer.h"
-#include "graphics/shader.h"
-#include "window/window.h"
+#include "graphics\renderer.h"
+#include "graphics\vertexbuffer.h"
+#include "graphics\indexbuffer.h"
+#include "graphics\shader.h"
+#include "graphics\window.h"
+
+#include "maths\maths.h"
 
 int main(void)
 {
+	using namespace valk;
+	using namespace graphics;
+	using namespace maths;
+
 	Window window("Game Engine", 640, 480);
 
 	{
@@ -38,9 +44,9 @@ int main(void)
 
 		IndexBuffer ib(indices, 6);
 
-		ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
+		ShaderProgramSource source = parseShader("res/shaders/Basic.shader");
 
-		GLuint shader = CreateShader(source.VertexSource, source.FragmentSource);
+		GLuint shader = createShader(source.VertexSource, source.FragmentSource);
 		GLCall(glUseProgram(shader));
 
 		GLint location = glGetUniformLocation(shader, "u_Color");
@@ -54,18 +60,22 @@ int main(void)
 		float g = 0.0f;
 		float increment = 0.01f;
 
-		while (!window.Closed())
+		vec4 a(0.2f, 0.3f, 0.8f, 1.0f);
+		vec4 b(0.5f, 0.2f, 0.1f, 1.0f);
+
+		vec4 c = a * b;
+
+		while (!window.closed())
 		{
-			window.Clear();
-			double x, y;
-			window.getMousePos(x, y);
-			std::cout << x << ", " << y << std::endl;
+			window.clear();
+
+			std::cout << c << std::endl;
 
 			GLCall(glUseProgram(shader));
 			GLCall(glUniform4f(location, 0.0f, g, 0.0f, 1.0f));
 
 			GLCall(glBindVertexArray(vao));
-			ib.Bind();
+			ib.bind();
 
 			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
@@ -76,7 +86,7 @@ int main(void)
 
 			g += increment;
 
-			window.Update();
+			window.update();
 		}
 
 		GLCall(glDeleteProgram(shader));

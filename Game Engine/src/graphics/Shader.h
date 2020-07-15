@@ -7,14 +7,18 @@
 #include <fstream>
 #include <sstream>
 
-struct ShaderProgramSource
-{
-	std::string VertexSource;
-	std::string FragmentSource;
-};
+namespace valk {
+	namespace graphics {
+		struct ShaderProgramSource
+		{
+			std::string VertexSource;
+			std::string FragmentSource;
+		};
 
-ShaderProgramSource ParseShader(const std::string& filepath);
+		ShaderProgramSource parseShader(const std::string& filepath);
 
-GLuint CompileShader(GLuint type, const std::string& source);
+		GLuint compileShader(GLuint type, const std::string& source);
 
-GLuint CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
+		GLuint createShader(const std::string& vertexShader, const std::string& fragmentShader);
+	}
+}

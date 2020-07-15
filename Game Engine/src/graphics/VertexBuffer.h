@@ -2,14 +2,18 @@
 
 #include <GL/glew.h>
 
-class VertexBuffer 
-{
-private:
-	GLuint m_RendererID;
-public:
-	VertexBuffer(const void* data, GLuint size);
-	~VertexBuffer();
+namespace valk {
+	namespace graphics {
+		class VertexBuffer
+		{
+		private:
+			GLuint m_RendererID;
+		public:
+			VertexBuffer(const void* data, GLuint size);
+			~VertexBuffer();
 
-	void Bind() const;
-	void Unbind() const;
-};
+			void bind() const;
+			void unbind() const;
+		};
+	}
+}

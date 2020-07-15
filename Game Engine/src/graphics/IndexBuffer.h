@@ -2,17 +2,21 @@
 
 #include <GL/glew.h>
 
-class IndexBuffer 
-{
-private:
-	GLuint m_RendererID;
-	GLuint m_Count;
-public:
-	IndexBuffer(const GLuint* data, GLuint count);
-	~IndexBuffer();
+namespace valk {
+	namespace graphics {
+		class IndexBuffer
+		{
+		private:
+			GLuint m_RendererID;
+			GLuint m_Count;
+		public:
+			IndexBuffer(const GLuint* data, GLuint count);
+			~IndexBuffer();
 
-	void Bind() const;
-	void Unbind() const;
+			void bind() const;
+			void unbind() const;
 
-	inline GLuint GetCount() const { return m_Count; }
-};
+			inline GLuint getCount() const { return m_Count; }
+		};
+	}
+}
