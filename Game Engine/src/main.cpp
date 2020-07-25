@@ -65,11 +65,19 @@ int main(void)
 
 		vec4 c = a * b;
 
+		mat4 position = mat4::translation(vec3(2, 3, 4));
+		position *= mat4::identity();
+
+		position.elements[12] = 2.0f;
+
+		vec4 column = position.columns[3];
+		std::cout << column << std::endl;
+
 		while (!window.closed())
 		{
 			window.clear();
 
-			std::cout << c << std::endl;
+			//std::cout << c << std::endl;
 
 			GLCall(glUseProgram(shader));
 			GLCall(glUniform4f(location, 0.0f, g, 0.0f, 1.0f));
