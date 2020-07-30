@@ -2,75 +2,116 @@
 
 namespace valk {
 	namespace graphics {
-		ShaderProgramSource parseShader(const std::string& filepath)
+
+		Shader::Shader(const char* vertPath, const char* fragPath)
+			: m_VertPath(vertPath), m_FragPath(fragPath)
 		{
-			std::ifstream stream(filepath);
-
-			enum class ShaderType
-			{
-				NONE = -1, VERTEX = 0, FRAGMENT = 1
-			};
-
-			std::string line;
-			std::stringstream ss[2];
-			ShaderType type = ShaderType::NONE;
-			while (getline(stream, line))
-			{
-				if (line.find("#shader") != std::string::npos)
-				{
-					if (line.find("vertex") != std::string::npos)
-						type = ShaderType::VERTEX;
-					else if (line.find("fragment") != std::string::npos)
-						type = ShaderType::FRAGMENT;
-				}
-				else
-				{
-					ss[(int)type] << line << '\n';
-				}
-			}
-
-			return { ss[0].str(), ss[1].str() };
+			m_ShaderID = load();
 		}
 
-		GLuint compileShader(GLuint type, const std::string& source)
+		Shader::~Shader() 
 		{
-			GLuint id = glCreateShader(type);
-			const GLchar* src = source.c_str();
-			GLCall(glShaderSource(id, 1, &src, nullptr));
-			GLCall(glCompileShader(id));
+			glDeleteProgram(m_ShaderID);
+		}
+
+		GLuint Shader::load() 
+		{
+			GLuint program = glCreateProgram();
+			GLuint vertex = glCreateShader(GL_VERTEX_SHADER);
+			GLuint fragment = glCreateShader(GL_FRAGMENT_SHADER);
+
+			std::string vertSourceString = FileUtils::read_file(m_VertPath);
+			std::string fragSourceString = FileUtils::read_file(m_FragPath);
+
+			const char* vertSource = vertSourceString.c_str();
+			const char* fragSource = fragSourceString.c_str();
+
+			glShaderSource(vertex, 1, &vertSource, NULL);
+			glCompileShader(vertex);
 
 			GLint result;
-			GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
-			if (result == GL_FALSE)
+			glGetShaderiv(vertex, GL_COMPILE_STATUS, &result);
+			if (result == GL_FALSE) 
 			{
 				GLint length;
-				GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
-				GLchar* message = (char*)alloca(length * sizeof(char));
-				GLCall(glGetShaderInfoLog(id, length, &length, message));
-				std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
-				std::cout << message << std::endl;
-				GLCall(glDeleteShader(id));
+				glGetShaderiv(vertex, GL_INFO_LOG_LENGTH, &length);
+				std::vector<char> error(length);
+				glGetShaderInfoLog(vertex, length, &length, &error[0]);
+				std::cout << "Failed to compile vertex shader!" << std::endl << &error[0] << std::endl;
+				glDeleteShader(vertex);
 				return 0;
 			}
 
-			return id;
-		}
+			glShaderSource(fragment, 1, &fragSource, NULL);
+			glCompileShader(fragment);
 
-		GLuint createShader(const std::string& vertexShader, const std::string& fragmentShader)
-		{
-			GLuint program = glCreateProgram();
-			GLuint vs = compileShader(GL_VERTEX_SHADER, vertexShader);
-			GLuint fs = compileShader(GL_FRAGMENT_SHADER, fragmentShader);
+			glGetShaderiv(fragment, GL_COMPILE_STATUS, &result);
+			if (result == GL_FALSE)
+			{
+				GLint length;
+				glGetShaderiv(fragment, GL_INFO_LOG_LENGTH, &length);
+				std::vector<char> error(length);
+				glGetShaderInfoLog(fragment, length, &length, &error[0]);
+				std::cout << "Failed to compile fragment shader!" << std::endl << &error[0] << std::endl;
+				glDeleteShader(fragment);
+				return 0;
+			}
 
-			GLCall(glAttachShader(program, vs));
-			GLCall(glAttachShader(program, fs));
-			GLCall(glLinkProgram(program));
-			GLCall(glValidateProgram(program));
+			glAttachShader(program, vertex);
+			glAttachShader(program, fragment);
 
-			GLCall(glDeleteShader(vs));
-			GLCall(glDeleteShader(fs));
+			glLinkProgram(program);
+			glValidateProgram(program);
+
+			glDeleteShader(vertex);
+			glDeleteShader(fragment);
 
 			return program;
+		}
+
+		GLint Shader::getUniformLocation(const GLchar* name) 
+		{
+			return glGetUniformLocation(m_ShaderID, name);
+		}
+
+		void Shader::setUniform1f(const GLchar* name, float value) 
+		{
+			glUniform1f(getUniformLocation(name), value);
+		}
+
+		void Shader::setUniform1i(const GLchar* name, int value) 
+		{
+			glUniform1i(getUniformLocation(name), value);
+		}
+
+		void Shader::setUniform2f(const GLchar* name, const maths::vec2& vector) 
+		{
+			glUniform2f(getUniformLocation(name), vector.x, vector.y);
+		}
+
+		void Shader::setUniform3f(const GLchar* name, const maths::vec3& vector)
+		{
+			glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
+		}
+
+		void Shader::setUniform4f(const GLchar* name, const maths::vec4& vector)
+		{
+			glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
+		}
+
+		void Shader::setUniformMat4(const GLchar* name, const maths::mat4& matrix) 
+		{
+			glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.elements);
+		}
+
+		void Shader::enable() const
+		{
+			glUseProgram(m_ShaderID);
+		}
+
+		void Shader::disable() const
+		{
+			glUseProgram(0);
 		}
 	}
 }
