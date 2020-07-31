@@ -4,6 +4,7 @@
 #include <vector>
 #include <GL/glew.h>
 
+#include "renderer.h"
 #include "../maths/maths.h"
 #include "../utils/fileutils.h"
 

@@ -1,10 +1,11 @@
+#pragma warning (disable 4018) // '<' signed / unsigned mismatch
 #include "vertexarray.h"
 
 namespace valk {
 	namespace graphics {
 		VertexArray::VertexArray() 
 		{
-			glGenVertexArrays(1, &m_ArrayID);
+			GLCall(glGenVertexArrays(1, &m_ArrayID));
 		}
 
 		VertexArray::~VertexArray() 
@@ -18,8 +19,8 @@ namespace valk {
 			bind();
 			buffer->bind();
 
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, buffer->getComponentCount(), GL_FLOAT, GL_FALSE, 0, 0);
+			GLCall(glEnableVertexAttribArray(index));
+			GLCall(glVertexAttribPointer(index, buffer->getComponentCount(), GL_FLOAT, GL_FALSE, 0, 0));
 
 			buffer->unbind();
 			unbind();
@@ -27,12 +28,12 @@ namespace valk {
 
 		void VertexArray::bind() const 
 		{
-			glBindVertexArray(m_ArrayID);
+			GLCall(glBindVertexArray(m_ArrayID));
 		}
 
 		void VertexArray::unbind() const
 		{
-			glBindVertexArray(0);
+			GLCall(glBindVertexArray(0));
 		}
 	}
 }

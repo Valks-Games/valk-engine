@@ -26,7 +26,7 @@ int main()
 	using namespace maths;
 
 	Window window("Game Engine", 1280, 720);
-	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	//GLCall(glClearColor(1.0f, 1.0f, 1.0f, 1.0f));
 
 	mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
 

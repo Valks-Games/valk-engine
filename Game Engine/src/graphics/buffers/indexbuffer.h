@@ -2,6 +2,8 @@
 
 #include <GL/glew.h>
 
+#include "../renderer.h"
+
 namespace valk {
 	namespace graphics {
 		class IndexBuffer

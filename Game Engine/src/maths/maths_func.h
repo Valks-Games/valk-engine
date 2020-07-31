@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning (disable : 4244) // Possible loss of data conversion from double to float
 
 #define _USE_MATH_DEFINES
 #include <math.h>
