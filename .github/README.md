@@ -1,4 +1,4 @@
-![PREVIEW](https://i.imgur.com/Su0LIPv.png)
+![PREVIEW](https://i.imgur.com/Q3w248m.png)
 
 A work-in-progress game engine.
 
