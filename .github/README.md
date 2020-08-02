@@ -1,6 +1,4 @@
-# Configuration
-In case for some reason the configuration gets undone for whatever reason, it has all been shown here.
-
+# Setup
 ## CodeBlocks
 Download [CodeBlocks with MinGW 32 Bit Binaries](http://www.codeblocks.org/downloads/)
 
