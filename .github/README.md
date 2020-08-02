@@ -2,7 +2,11 @@
 In case for some reason the configuration gets undone for whatever reason, it has all been shown here.
 
 ## CodeBlocks
-Download the [MinGW installer](https://sourceforge.net/projects/mingw/) and install the appropriate packages. Once MinGW is installed, make sure it is 32 bit. Go in the bin directory and type `gcc --version`. If you get `x86_64` then it's 64 bit.
+Download [CodeBlocks with MinGW 32 Bit Binaries](http://www.codeblocks.org/downloads/)
+
+Make sure the compiler is linked to MinGW under Settings > Compiler > Toolchain Exectuables > Compiler's Installation Directory
+
+Make sure MinGW is indeed 32 bit. Go to the bin directory of MinGW and type `gcc --version`. (If you see `x86_64` then it is 64 bit)
 
 ### Build Options
 Link Libraries
