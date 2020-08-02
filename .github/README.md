@@ -1,3 +1,12 @@
+## Mingw
+If using CodeBlocks / Mingw, make sure the following is done.
+- Remove the `.lib` extensions from all linked libraries
+- Change `glfw3.lib` to `libglfw.a` (Mingw compiler looks for `.a` files)
+- Provide the full linking paths for `glew32s.lib` and `libglfw.a`
+- Mingw is 32 bit (not 64 bit); note that 64 bit can appear as x86_64
+- Instead of using `__debugbreak();` use `__builtin_trap;`
+- If a function is both a friend and static, declare the static method outside of the class and a copy of method with the friend modifier in the class
+
 ## Configuration
 Make sure the project is using `x86`  
 Following settings should apply for `All Configurations` and `All Platforms`.
